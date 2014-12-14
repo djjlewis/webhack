@@ -1,25 +1,16 @@
-(function() {
-
-	var playerStartCoords = { x:5, y:5 };
-
-	var playerCoords = playerStartCoords;
-
-
-	var playerChar = "<span style='color:rgb(245,241,222)'>@</span>";
+define(["player"], function(player) {
+	
 	var wildernessChar = ".";
 
 	var mapWidth = 60;
 	var mapHeight = 30;
 
-	var world = document.getElementById("world");
-
-	function drawMap() {
+	function draw() {
 		var map = "";
 		for (var y = 0; y < mapHeight; y++) {
 
 			for (var x = 0; x< mapWidth; x++)
 			{
-
 				if (x> 5 && x < 10 && y > 10  && y < 20) {
 					map += "<span style='color:rgb(0,255,0);'>";
 					map = map + "T";
@@ -35,8 +26,8 @@
 					map = map + "X";
 					map += "</span>";
 				}
-				else if (y === playerCoords.y && x === playerCoords.x) {
-					map = map + playerChar;
+				else if (y === player.playerCoords.y && x === player.playerCoords.x) {
+					map = map + player.playerChar;
 				}
 				else
 				{
@@ -47,31 +38,42 @@
 		}
 		world.innerHTML = map;
 	}
-
-	//alert("hehe");
-
-	world.addEventListener("keypress", function(e) {
-		//alert("world");
-	});
-
+	
+	var world = document.getElementById("world");
 	document.addEventListener("keydown", function(e) {
-
 		e.preventDefault();
-		//alert("document");
 		if (e.keyCode === 37) {
-			playerCoords.x -= 1; 
+			player.moveLeft(); 
 		}
 		else if(e.keyCode === 38) {
-			playerCoords.y -= 1;
+			player.moveUp();
 		}
 		else if(e.keyCode === 39) {
-			playerCoords.x += 1;
+			player.moveRight();
 		}
 		else if(e.keyCode === 40) {
-			playerCoords.y += 1;
+			player.moveDown();
 		}
-		drawMap();
 	});
 
-	drawMap();
-}());
+	var gameLoop = function() {
+	  //self.update();
+	  draw();
+	};
+
+	function start() {
+		var fps = 50;
+		// Start the game loop
+		var intervalId = setInterval(gameLoop, 1000 / fps);
+	}
+
+	function stop() {
+		clearInterval(intervalId);
+	}
+
+	return {
+		start: start
+	};
+
+
+});
