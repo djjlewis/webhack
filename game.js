@@ -1,42 +1,49 @@
-define(["player"], function(player) {
+define(["player", "monster", "map"], function(player, monster, map) {
 	
 	var wildernessChar = ".";
 
-	var mapWidth = 60;
-	var mapHeight = 30;
-
 	function draw() {
-		var map = "";
-		for (var y = 0; y < mapHeight; y++) {
+		var mapHtml = "";
+		for (var y = 0; y < map.height; y++) {
 
-			for (var x = 0; x< mapWidth; x++)
+			for (var x = 0; x < map.width; x++)
 			{
-				if (x> 5 && x < 10 && y > 10  && y < 20) {
-					map += "<span style='color:rgb(0,255,0);'>";
-					map = map + "T";
-					map += "</span>";
+				if (y === player.coords.y && x === player.coords.x) {
+					mapHtml += player.character;
 				}
-				else if (x> 15 && x < 20 && y >= 0  && y <= mapHeight) {
-					map += "<span style='color:rgb(0,0,255);'>";
-					map = map + "S";
-					map += "</span>";
+				else if (y === map.treasureCoords.y && x === map.treasureCoords.x) {
+					mapHtml += "€";
 				}
-				else if (x> 20 && x < 25 && y >= 20  && y <= 25) {
-					map += "<span style='color:rgb(255,0,0);'>";
-					map = map + "X";
-					map += "</span>";
+				else if (y === monster.coords.y && x === monster.coords.x) {
+					mapHtml += monster.character;
 				}
-				else if (y === player.playerCoords.y && x === player.playerCoords.x) {
-					map = map + player.playerChar;
-				}
-				else
-				{
-					map = map + wildernessChar;
-				}
+				else {
+					var mapChar = map.mapData[y][x];
+
+					if (mapChar === "T") {
+						mapHtml += "<span style='color:rgb(0,255,0);'>";
+						mapHtml += mapChar;
+						mapHtml += "</span>";
+					}
+					else if (mapChar === "S") {
+						mapHtml += "<span style='color:rgb(0,0,255);'>";
+						mapHtml += mapChar;
+						mapHtml += "</span>";
+					}
+					else if (mapChar === "X") {
+						mapHtml += "<span style='color:rgb(255,0,0);'>";
+						mapHtml += mapChar;
+						mapHtml += "</span>";
+					}
+					else
+					{
+						mapHtml += mapChar;
+					}
+				}				
 			}			
-			map += "\n";
+			mapHtml += "\n";
 		}
-		world.innerHTML = map;
+		world.innerHTML = mapHtml;
 	}
 	
 	var world = document.getElementById("world");
@@ -58,11 +65,19 @@ define(["player"], function(player) {
 
 	var gameLoop = function() {
 	  //self.update();
+	  monster.moveRandom();
 	  draw();
+
+	  if(monster.coords.x === player.coords.x && monster.coords.y === player.coords.y )
+	  {
+	  	player.lives -= 1;
+	  	alert("The monster ate you.");	
+	  }
+
 	};
 
 	function start() {
-		var fps = 50;
+		var fps = 10;
 		// Start the game loop
 		var intervalId = setInterval(gameLoop, 1000 / fps);
 	}
