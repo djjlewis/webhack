@@ -6,17 +6,17 @@ Over Christmas last year (2014) I decided to spend a few hours and have some fun
 
 I went for a nethack style theme, using ASCII characters as the only elements on the maps.
 
-The map files are in JSON format with a few parametes such as the location of the treasure, and the actual format, which is basically to write characters as they will appear on the map. There are a few examples in the maps folder, and you are of course free to write your own. Currently the following are supported:
+The map files are in JSON format with a few parametes such as the location of the treasure, and the actual map layout, which is basically to write characters as they will appear on the map. There are a few examples in the maps folder, and you are of course free to write your own. Currently the following are supported:
 
-. -- normal landscape
-T - trees, which can't be moved through
-S - Water, you will drown if you enter
-X - Lava, you will burn up and die if you fall in
+* . (normal landscape)
+* T (trees, which can't be moved through)
+* S (Water, you will drown if you enter)
+* X (Lava, you will burn up and die if you fall in)
 
 The player and monster start positions are defined in their respective.js files (not ideal) and will use the following characters:
 
-§ - Monster character, moves randomly and will kill player if touched
-@ - Player, you control this with arrow keys
+* § - Monster character, moves randomly and will kill player if touched
+* @ - Player, you control this with arrow keys
 
 The map file to use is defined in the index.html.
 
